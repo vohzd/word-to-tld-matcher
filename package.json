@@ -10,6 +10,7 @@
   "license": "MIT",
   "repository": "https://github.com/vohzd/word-to-tld-matcher.git",
   "dependencies": {
+    "csv": "^1.1.1",
     "moment": "^2.18.1",
     "vue": "^2.1.0",
     "vue-date": "^1.1.2",

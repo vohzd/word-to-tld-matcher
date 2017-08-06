@@ -49,11 +49,6 @@ export default {
       }
     },
     uploadToServer(){
-
-
-
-      console.log(this.validJSON);
-
       this.$http.post("http://localhost:3000/parseFile", this.parsedText, {
         headers: {
           "Content-Type": "application/json",
@@ -63,29 +58,10 @@ export default {
       }).then((json) => {
         console.log(json);
       })
-
-      /*
-
-      fetch("http://localhost:3000/parseFile", {
-        method: "POST",
-        body: this.validJSON,
-        mode: "no-cors",
-        headers: new Headers({
-          "Content-Type": "application/json",
-        })
-      }).then((res) => {
-        console.log("response from fetch");
-        console.log(res);
-      });
-
-      */
-
-
     }
   },
   watch: {
     parsedText(){
-      console.log(this.parsedText);
       this.createValidJson();
     },
     validJSON(){

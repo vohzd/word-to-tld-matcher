@@ -2,14 +2,17 @@ const express         = require("express");
 const cors            = require("cors");
 const app             = express();
 const bodyParser      = require("body-parser");
-
+const csv             = require("csv");
+const fs              = require("fs");
+/*
+  EXPRESS STUFF
+  */
 
 app.use(cors({
   origin: "*"
 }));
 
 app.use(bodyParser.json());
-//app.use(bodyParser.urlencoded({extended: true}));
 
 app.get("/", (req, res) => {
   res.send("Hello")
@@ -20,20 +23,52 @@ app.get("/parseFile", (req, res) => {
 })
 
 app.post("/parseFile", (req, res) => {
-
-  /*
-  console.log(req.body);
-  res.json(req.body, "file.json");
-
-  */
-  console.log("blarg");
-  console.log(req.body);
-
-  //res.sendStatus(200);
+  parseFile(req.body);
   res.json(req.body);
 });
-
 
 app.listen(3000, () => {
   console.log("yep");
 });
+
+/*
+  FILE I/O STUFF
+  */
+
+let listOfTLDs = null;
+let resultsArray = [];
+
+(function receiveAllTLDS(){
+  fs.readFile("./files/small-tld-list.csv", {
+    encoding: "utf-8"
+  }, (err, csvData) => {
+    if (err){
+      console.log(err);
+    }
+    csv.parse(csvData, (err, parsedData) => {
+      listOfTLDs = parsedData;
+    });
+  })
+})();
+
+function parseFile(words){
+  listOfTLDs.forEach((tld, tldIteration) => {
+    words.forEach((word, wordIteration) => {
+      let test = word.indexOf(tld[0]);
+      let cropPosition = Math.abs(tld[0].length - word.length);
+      if (test > 0){
+        if (cropPosition === test){
+          let hostName = word.slice(0, cropPosition);
+          let domainName = `${hostName}.${tld[0]}`;
+          resultsArray.push(domainName);
+        }
+      }
+
+    });
+  });
+  finished()
+}
+
+function finished(){
+  console.log(resultsArray);
+}
