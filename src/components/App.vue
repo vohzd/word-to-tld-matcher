@@ -68,11 +68,15 @@
 		font-weight: normal;
 	}
 
-	.main-content-port {
+	.main-viewport {
 		margin-left: 30%;
 		margin-right: 30%;
 		width: 40%;
 		display: block;
+	}
+
+	.main-content-port {
+		padding: 32px;
 	}
 
 	button, input {

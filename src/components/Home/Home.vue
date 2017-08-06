@@ -33,7 +33,7 @@
 
 <script>
 
-
+// todo--- create this as a vue helper
 (function(console){
 
     console.save = function(data, filename){
@@ -120,6 +120,22 @@ export default {
     }
   }
 }
+
+
+/*
+
+desired output....
+
+
+{
+  {
+  tld: "az",
+  matches: [...]
+  },
+  ...
+}
+
+*/
 </script>
 
 <style lang="css">

@@ -24,7 +24,7 @@ app.get("/parseFile", (req, res) => {
 
 app.post("/parseFile", (req, res) => {
   parseFile(req.body);
-  res.json(resultsArray);
+  res.json(formattedOutput);
 });
 
 app.listen(3000, () => {
@@ -37,8 +37,9 @@ app.listen(3000, () => {
 
 let listOfTLDs = null;
 let resultsArray = [];
+let formattedOutput = {}
 
-(function receiveAllTLDS(){
+function parseAllTLDs(){
   fs.readFile("./files/tlds.csv", {
     encoding: "utf-8"
   }, (err, csvData) => {
@@ -49,21 +50,31 @@ let resultsArray = [];
       listOfTLDs = parsedData;
     });
   })
-})();
+
+};
 
 function parseFile(words){
   listOfTLDs.forEach((tld, tldIteration) => {
+
+    if (!tld[0]) return false;
+    /// aa, az
+    // create a blank array for the results to live in.
+    formattedOutput[tld[0]] = [];
     words.forEach((word, wordIteration) => {
+
+      if (!word) return false;
+      // aarvard, aachtung...
       let test = word.indexOf(tld[0]);
       let cropPosition = Math.abs(tld[0].length - word.length);
       if (test > 0){
         if (cropPosition === test){
           let hostName = word.slice(0, cropPosition);
           let domainName = `${hostName}.${tld[0]}`;
-          resultsArray.push(domainName);
+          formattedOutput[tld[0]].push(domainName);
         }
       }
-
     });
   });
 }
+
+parseAllTLDs();
