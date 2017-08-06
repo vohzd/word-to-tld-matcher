@@ -12,7 +12,7 @@ app.use(cors({
   origin: "*"
 }));
 
-app.use(bodyParser.json());
+app.use(bodyParser.json({limit: '5mb'}));
 
 app.get("/", (req, res) => {
   res.send("Hello")
@@ -24,7 +24,7 @@ app.get("/parseFile", (req, res) => {
 
 app.post("/parseFile", (req, res) => {
   parseFile(req.body);
-  res.json(req.body);
+  res.json(resultsArray);
 });
 
 app.listen(3000, () => {
@@ -39,7 +39,7 @@ let listOfTLDs = null;
 let resultsArray = [];
 
 (function receiveAllTLDS(){
-  fs.readFile("./files/small-tld-list.csv", {
+  fs.readFile("./files/tlds.csv", {
     encoding: "utf-8"
   }, (err, csvData) => {
     if (err){
@@ -66,9 +66,4 @@ function parseFile(words){
 
     });
   });
-  finished()
-}
-
-function finished(){
-  console.log(resultsArray);
 }
